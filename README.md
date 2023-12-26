@@ -65,7 +65,7 @@ trino:
       valueFrom:
         secretKeyRef:
           key: GLUE_ACCESS_KEY
-          name: glue-secrets 
+          name: glue-secrets
       # ... (other environment variables omitted for brevity)
 ```
 You can view a sample `values.yaml` file [here](values.yaml).

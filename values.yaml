@@ -33,28 +33,72 @@ trino:
         secretKeyRef:
           key: MYSQL_PASSWORD
           name: mysql-secret
-    - name: GLUE_CATALOG_ID
-      valueFrom:
-        secretKeyRef:
-          key: GLUE_CATALOG_ID
-          name: glue-secrets
-    - name: GLUE_REGION
-      valueFrom:
-        secretKeyRef:
-          key: GLUE_REGION
-          name: glue-secret
-    - name: GLUE_ACCESS_KEY
-      valueFrom:
-        secretKeyRef:
-          key: GLUE_ACCESS_KEY
-          name: glue-secret
-    - name: GLUE_SECRET_KEY
-      valueFrom:
-        secretKeyRef:
-          key: GLUE_SECRET_KEY
-          name: glue-secret
+#    - name: GLUE_CATALOG_ID
+#      valueFrom:
+#        secretKeyRef:
+#          key: GLUE_CATALOG_ID
+#          name: glue-secrets
+#    - name: GLUE_REGION
+#      valueFrom:
+#        secretKeyRef:
+#          key: GLUE_REGION
+#          name: glue-secret
+#    - name: GLUE_ACCESS_KEY
+#      valueFrom:
+#        secretKeyRef:
+#          key: GLUE_ACCESS_KEY
+#          name: glue-secret
+#    - name: GLUE_SECRET_KEY
+#      valueFrom:
+#        secretKeyRef:
+#          key: GLUE_SECRET_KEY
+#          name: glue-secret
 openldap:
   enabled: false
 
 ranger-usersync:
   enabled: false
+
+ranger-admin:
+  env:
+    - name: DB_ROOT_USER
+      valueFrom:
+        secretKeyRef:
+          name: ranger-secrets
+          key: DB_ROOT_USER
+    - name: DB_ROOT_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: ranger-secrets
+          key: DB_ROOT_PASSWORD
+    - name: DB_HOST
+      valueFrom:
+        secretKeyRef:
+          name: ranger-secrets
+          key: DB_HOST
+    - name: RANGER_DB_NAME
+      value: "ranger"
+    - name: RANGER_DB_USER
+      valueFrom:
+        secretKeyRef:
+          name: ranger-secrets
+          key: RANGER_DB_USER
+    - name: RANGER_DB_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: ranger-secrets
+          key: RANGER_DB_PASSWORD
+    - name: RANGER_ADMIN_PASSWORD
+      value: "rangerR0cks!"
+    - name: RANGER_TAG_SYNC_PASSWORD
+      value: "rangerR0cks!"
+    - name: RANGER_USER_SYNC_PASSWORD
+      value: "rangerR0cks!"
+    - name: RANGER_KEY_ADMIN_PASSWORD
+      value: "rangerR0cks!"
+    - name: POLICY_MANAGER_URL
+      value: http://ranger-admin:6080
+    - name: ADMIN_USERNAME
+      value: admin
+    - name: ADMIN_PASSWORD
+      value: "rangerR0cks!"

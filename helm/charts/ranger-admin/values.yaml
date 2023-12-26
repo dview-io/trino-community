@@ -101,3 +101,46 @@ tolerations: []
 affinity: {}
 
 data_plane_secret_name: data-plane-secrets
+
+env:
+  - name: DB_ROOT_USER
+    valueFrom:
+      secretKeyRef:
+        name: data-plane-secrets
+        key: DB_ROOT_USER
+  - name: DB_ROOT_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: data-plane-secrets
+        key: DB_ROOT_PASSWORD
+  - name: DB_HOST
+    valueFrom:
+      secretKeyRef:
+        name: data-plane-secrets
+        key: DB_HOST
+  - name: RANGER_DB_NAME
+    value: "ranger"
+  - name: RANGER_DB_USER
+    valueFrom:
+      secretKeyRef:
+        name: data-plane-secrets
+        key: RANGER_DB_USER
+  - name: RANGER_DB_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: data-plane-secrets
+        key: RANGER_DB_PASSWORD
+  - name: RANGER_ADMIN_PASSWORD
+    value: "rangerR0cks!"
+  - name: RANGER_TAG_SYNC_PASSWORD
+    value: "rangerR0cks!"
+  - name: RANGER_USER_SYNC_PASSWORD
+    value: "rangerR0cks!"
+  - name: RANGER_KEY_ADMIN_PASSWORD
+    value: "rangerR0cks!"
+  - name: POLICY_MANAGER_URL
+    value: http://{{ include "ranger-admin.fullname" . }}:6080
+  - name: ADMIN_USERNAME
+    value: admin
+  - name: ADMIN_PASSWORD
+    value: "rangerR0cks!"
