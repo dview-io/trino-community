@@ -14,7 +14,7 @@ imagePullSecrets:
 
 coordinatorNameOverride: "dview-trino-coordinator"
 workerNameOverride: "dview-trino-worker"
-
+fullnameOverride: "dview-trino"
 server:
   workers: 2
   node:
@@ -348,8 +348,8 @@ ingress:
   #      - chart-example.local
 
 ranger:
-    policy_manager_url: http://ranger-admin:6080
-    repository_name: trino_sandbox
+    policy_manager_url: http://dview-ranger-admin:6080
+    repository_name: dview-trino
     elasticsearch:
         enabled: false
 

@@ -42,7 +42,7 @@ data:
         # Example:
         # REPOSITORY_NAME=trinodev
         #
-        REPOSITORY_NAME={{.Values.ranger.repository_name | default "trinodev"}}
+        REPOSITORY_NAME={{.Values.ranger.repository_name | default "dview-trino"}}
 
         # Configure INSTALL_ENV=docker if running trino in docker environment
         INSTALL_ENV=docker
