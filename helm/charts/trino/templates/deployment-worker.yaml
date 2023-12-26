@@ -73,12 +73,6 @@ spec:
           secret:
             secretName: {{ .secretName }}
         {{- end }}
-        - name: trino-ranger-config
-          configMap:
-            name: trino-ranger-config
-            items:
-             - key: install.properties
-               path: install.properties
       {{- if .Values.initContainers.worker }}
       initContainers:
       {{- tpl (toYaml .Values.initContainers.worker) . | nindent 6 }}
