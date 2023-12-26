@@ -46,7 +46,10 @@ spec:
       volumes:
         - name: trino-ranger-config
           configMap:
-            name: ranger-config-volume
+            name: trino-ranger-config
+            items:
+              - key: install.properties
+                path: install.properties
         - name: config-volume
           configMap:
             name: {{ template "trino.coordinator" . }}
@@ -111,7 +114,7 @@ spec:
             - mountPath: {{ .Values.kafka.mountPath }}
               name: schemas-volume
             - mountPath: /mnt/ranger/
-              name: ranger-config-volume
+              name: trino-ranger-config
             {{- if .Values.accessControl }}{{- if eq .Values.accessControl.type "configmap" }}
             - mountPath: {{ .Values.server.config.path }}/access-control
               name: access-control-volume

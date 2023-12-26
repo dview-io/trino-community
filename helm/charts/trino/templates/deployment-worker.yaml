@@ -50,10 +50,10 @@ spec:
       volumes:
         - name: trino-ranger-config
           configMap:
-            name: ranger-config-volume
-#        - name: trino-etc-volume
-#          persistentVolumeClaim:
-#              claimName: trino-etc
+            name: trino-ranger-config
+            items:
+              - key: install.properties
+                path: install.properties
         - name: config-volume
           configMap:
             name: {{ template "trino.worker" . }}
@@ -101,7 +101,7 @@ spec:
             {{- toYaml .Values.envFrom | nindent 12 }}
           volumeMounts:
             - mountPath: /mnt/ranger/
-              name: ranger-config-volume
+              name: trino-ranger-config
             - mountPath: {{ .Values.server.config.mountPath }}
               name: config-volume
             - mountPath: {{ .Values.server.config.mountPath }}/catalog
