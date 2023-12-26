@@ -34,7 +34,7 @@ data:
         # Example:
         # POLICY_MGR_URL=http://policymanager.xasecure.net:6080
         #
-        POLICY_MGR_URL={{.Values.ranger.policy_manager_url | default "http://ranger-admin:6080"}}
+        POLICY_MGR_URL={{.Values.ranger.policy_manager_url | default "http://dview-ranger-admin:6080"}}
 
         #
         # This is the repository name created within policy manager

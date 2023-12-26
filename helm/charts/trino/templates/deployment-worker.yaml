@@ -48,6 +48,9 @@ spec:
       shareProcessNamespace: {{ .Values.shareProcessNamespace.worker }}
       {{- end }}
       volumes:
+        - name: trino-ranger-config
+          configMap:
+            name: ranger-config-volume
 #        - name: trino-etc-volume
 #          persistentVolumeClaim:
 #              claimName: trino-etc
@@ -90,13 +93,15 @@ spec:
             - name: TRINO_MOUNT_CONFIG_PATH
               value: /mnt/etc/trino
             - name: TRINO_CONFIG_PATH
-              value: /etc/
+              value: /etc
+            - name: RANGER_CONFIG_PATH
+              value: /mnt/ranger
             {{- toYaml .Values.env | nindent 12 }}
           envFrom:
             {{- toYaml .Values.envFrom | nindent 12 }}
           volumeMounts:
-#            - mountPath: /etc/trino
-#              name: trino-etc-volume
+            - mountPath: /mnt/ranger/
+              name: ranger-config-volume
             - mountPath: {{ .Values.server.config.mountPath }}
               name: config-volume
             - mountPath: {{ .Values.server.config.mountPath }}/catalog

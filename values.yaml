@@ -3,20 +3,20 @@
 # Declare variables to be passed into your templates.
 trino:
   additionalCatalogs:
-    mysql.properties: |-
+    mysql: |-
       connector.name=mysql
       connection-url=jdbc:mysql://${env:MYSQL_HOST:-"localhost"}:3306
       connection-user=${env:MYSQL_USER:-"root"}
       connection-password=${env:MYSQL_PASSWORD:-"password"}
-    glue.properties: |-
-      connector.name=hive
-      hive.metastore=glue
-      hive.metastore.glue.region=${env:GLUE_REGION:-"us-east-1"}
-      hive.metastore.glue.catalogid=${env:GLUE_CATALOG_ID:-"default-glue-catalog-id"}
-      hive.metastore.glue.access-key=${env:GLUE_ACCESS_KEY:-"default-access-key"}
-      hive.metastore.glue.secret-key=${env:GLUE_SECRET_KEY:-"default-secret-key"}
-      # Optional properties
-      # hive.metastore.glue.endpoint-url=custom-glue-endpoint-url
+#    glue.properties: |-
+#      connector.name=hive
+#      hive.metastore=glue
+#      hive.metastore.glue.region=${env:GLUE_REGION:-"us-east-1"}
+#      hive.metastore.glue.catalogid=${env:GLUE_CATALOG_ID:-"default-glue-catalog-id"}
+#      hive.metastore.glue.access-key=${env:GLUE_ACCESS_KEY:-"default-access-key"}
+#      hive.metastore.glue.secret-key=${env:GLUE_SECRET_KEY:-"default-secret-key"}
+#      # Optional properties
+#      # hive.metastore.glue.endpoint-url=custom-glue-endpoint-url
   env:
     - name: MYSQL_HOST
       valueFrom:
@@ -26,7 +26,7 @@ trino:
     - name: MYSQL_USERNAME
       valueFrom:
         secretKeyRef:
-          key: MYSQL_USERNAME
+          key: MYSQL_USER
           name: mysql-secret
     - name: MYSQL_PASSWORD
       valueFrom:
@@ -97,7 +97,7 @@ ranger-admin:
     - name: RANGER_KEY_ADMIN_PASSWORD
       value: "rangerR0cks!"
     - name: POLICY_MANAGER_URL
-      value: http://ranger-admin:6080
+      value: http://dview-ranger-admin:6080
     - name: ADMIN_USERNAME
       value: admin
     - name: ADMIN_PASSWORD

@@ -46,10 +46,7 @@ spec:
       volumes:
         - name: trino-ranger-config
           configMap:
-            name: trino-ranger-config
-            items:
-              - key: install.properties
-                path: install.properties
+            name: ranger-config-volume
         - name: config-volume
           configMap:
             name: {{ template "trino.coordinator" . }}
@@ -100,7 +97,9 @@ spec:
             - name: TRINO_MOUNT_CONFIG_PATH
               value: /mnt/etc/trino
             - name: TRINO_CONFIG_PATH
-              value: /etc/
+              value: /etc
+            - name: RANGER_CONFIG_PATH
+              value: /mnt/ranger
             {{- toYaml .Values.env | nindent 12 }}
           envFrom:
             {{- toYaml .Values.envFrom | nindent 12 }}
@@ -111,6 +110,8 @@ spec:
               name: catalog-volume
             - mountPath: {{ .Values.kafka.mountPath }}
               name: schemas-volume
+            - mountPath: /mnt/ranger/
+              name: ranger-config-volume
             {{- if .Values.accessControl }}{{- if eq .Values.accessControl.type "configmap" }}
             - mountPath: {{ .Values.server.config.path }}/access-control
               name: access-control-volume
