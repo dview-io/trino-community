@@ -1,0 +1,106 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "ranger-usersync.fullname" . }}
+  labels:
+    {{- include "ranger-usersync.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "ranger-usersync.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "ranger-usersync.labels" . | nindent 8 }}
+	{{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "ranger-usersync.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: [ "/bin/bash", "-c" ]
+          args:
+            - "cp /opt/config-map/install.properties /opt/ranger/usersync/install.properties && chmod 777 /opt/ranger/usersync/install.properties && /opt/ranger/replace_env_vars.sh /opt/ranger/usersync/install.properties && /home/ranger/scripts/ranger-usersync.sh"
+          env:
+            - name: RANGER_USER_SYNC_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.data_plane_secret_name | default "data-plane-secrets" }}
+                  key: RANGER_USER_SYNC_PASSWORD
+            - name: LDAP_BIND_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.data_plane_secret_name | default "data-plane-secrets" }}
+                  key: LDAP_ADMIN_PASSWORD
+            - name: LDAP_URL
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.data_plane_secret_name | default "data-plane-secrets" }}
+                  key: LDAP_URL
+            - name: LDAP_BIND_DN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.data_plane_secret_name | default "data-plane-secrets" }}
+                  key: LDAP_BIND_DN
+            - name: LDAP_SEARCH_BASE
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.data_plane_secret_name | default "data-plane-secrets" }}
+                  key: LDAP_SEARCH_BASE
+            - name: LDAP_USER_SEARCH_BASE
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.data_plane_secret_name | default "data-plane-secrets" }}
+                  key: LDAP_USER_SEARCH_BASE
+            - name: LDAP_USER_OBJECT_CLASS
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.data_plane_secret_name | default "data-plane-secrets" }}
+                  key: LDAP_USER_OBJECT_CLASS
+            - name: LDAP_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.data_plane_secret_name | default "data-plane-secrets" }}
+                  key: LDAP_ADMIN_PASSWORD
+            - name: POLICY_MGR_URL
+              value: {{ .Values.ranger_usersync.policy_manager_url  | default "http://ranger-admin:6080" }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          {{- with .Values.volumeMounts }}
+          volumeMounts:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      {{- with .Values.volumes }}
+      volumes:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

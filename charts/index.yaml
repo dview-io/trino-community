@@ -1,0 +1,25 @@
+apiVersion: v1
+entries:
+  Dview Trino Community:
+  - apiVersion: v2
+    created: "2023-12-25T18:34:43.550589+05:30"
+    dependencies:
+    - name: openldap-stack-ha
+      repository: ""
+      version: 4.1.2
+    - name: ranger-admin
+      repository: ""
+      version: 0.1.0
+    - name: ranger-usersync
+      repository: ""
+      version: 0.1.0
+    - name: trino
+      repository: ""
+      version: 0.14.0
+    description: A Helm chart to manage Dview Trino Community dependencies
+    digest: f830248f593eb4d6e9e7dbdd7bacbfa58b84a5cc1fbf7d6470b8a8c21d1dc91a
+    name: Dview Trino Community
+    urls:
+    - Dview Trino Community-0.1.0.tgz
+    version: 0.1.0
+generated: "2023-12-25T18:34:43.545388+05:30"

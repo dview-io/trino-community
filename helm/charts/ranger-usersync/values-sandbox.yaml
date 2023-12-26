@@ -1,0 +1,8 @@
+ldap:
+  url: ldap://openldap:389
+  bind_dn: cn=admin,dc=dview,dc=io
+  search_base: dc=dview,dc=io
+  user_search_base: dc=dview,dc=io
+  user_object_class: person
+ranger_usersync:
+  password: rangerR0cks!

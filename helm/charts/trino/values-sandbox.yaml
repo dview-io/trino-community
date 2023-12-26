@@ -1,0 +1,22 @@
+server:
+    workers: 1
+env:
+  - name: TRINO_MOUNT_CONFIG_PATH
+    value: /mnt/etc/trino
+  - name: TRINO_CONFIG_PATH
+    value: /etc/
+serviceAccount:
+    create: true
+ranger:
+    policy_manager_url: http://ranger-admin:6080
+    repository_name: trino_sandbox
+    elasticsearch:
+        enabled: false
+
+# Additional volumeMounts on the output Deployment definition.
+volumeMounts:
+  - name: trino-ranger-config
+    mountPath: /root/ranger-trino-plugin/install.properties
+    subPath: install.properties
+    readOnly: true
+
