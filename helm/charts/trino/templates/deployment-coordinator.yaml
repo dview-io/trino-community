@@ -97,6 +97,10 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
+            - name: TRINO_MOUNT_CONFIG_PATH
+              value: /mnt/etc/trino
+            - name: TRINO_CONFIG_PATH
+              value: /etc/
             {{- toYaml .Values.env | nindent 12 }}
           envFrom:
             {{- toYaml .Values.envFrom | nindent 12 }}

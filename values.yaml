@@ -2,7 +2,57 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 trino:
-
+  additionalCatalogs:
+    mysql.properties: |-
+      connector.name=mysql
+      connection-url=jdbc:mysql://${env:MYSQL_HOST:-"localhost"}:3306
+      connection-user=${env:MYSQL_USER:-"root"}
+      connection-password=${env:MYSQL_PASSWORD:-"password"}
+    glue.properties: |-
+      connector.name=hive
+      hive.metastore=glue
+      hive.metastore.glue.region=${env:GLUE_REGION:-"us-east-1"}
+      hive.metastore.glue.catalogid=${env:GLUE_CATALOG_ID:-"default-glue-catalog-id"}
+      hive.metastore.glue.access-key=${env:GLUE_ACCESS_KEY:-"default-access-key"}
+      hive.metastore.glue.secret-key=${env:GLUE_SECRET_KEY:-"default-secret-key"}
+      # Optional properties
+      # hive.metastore.glue.endpoint-url=custom-glue-endpoint-url
+  env:
+    - name: MYSQL_HOST
+      valueFrom:
+        secretKeyRef:
+          key: MYSQL_HOST
+          name: mysql-secret
+    - name: MYSQL_USERNAME
+      valueFrom:
+        secretKeyRef:
+          key: MYSQL_USERNAME
+          name: mysql-secret
+    - name: MYSQL_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          key: MYSQL_PASSWORD
+          name: mysql-secret
+    - name: GLUE_CATALOG_ID
+      valueFrom:
+        secretKeyRef:
+          key: GLUE_CATALOG_ID
+          name: glue-secrets
+    - name: GLUE_REGION
+      valueFrom:
+        secretKeyRef:
+          key: GLUE_REGION
+          name: glue-secret
+    - name: GLUE_ACCESS_KEY
+      valueFrom:
+        secretKeyRef:
+          key: GLUE_ACCESS_KEY
+          name: glue-secret
+    - name: GLUE_SECRET_KEY
+      valueFrom:
+        secretKeyRef:
+          key: GLUE_SECRET_KEY
+          name: glue-secret
 openldap:
   enabled: false
 
